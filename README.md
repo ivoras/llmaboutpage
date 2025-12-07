@@ -14,9 +14,18 @@ Version 0.1-beta
 - **Streaming Responses**: Real-time display of LLM responses
 - **No Remote Dependencies**: All libraries bundled locally
 
+### Why this exists?
+
+This Chrome extension exists because I couldn't get Page Assist to include the entire page's content into the LLM prompt, and I needed that to analyze some reports. This extension gets the current page's rendered HTML (including whatever was done to the DOM in JavaScript, which covers SPA), converts it to Markdown, and sends it with your question into the prompt. Here are some examples that work with this extension, but don't work with Page Assist:
+
+- Load [news.ycombinator.dom](https://news.ycombinator.com), ask questions like: "What's the 20th news item", or "List all news items created by the user 'tosh'".
+- Load a GitHub org list of repos [like this one](https://github.com/orgs/ggml-org/repositories), ask a question: "List all repos on this page ordered alphabetically by their name"
+
 **Notes:**
 
 - You should manually clear the chat history when asking something about a new page.
+- Models need to support however long the page is. A 16k context is realistically the minimum.
+- I've tested this mostly with the `qwen3-coder:30b` model, with context size increased to 32k. It works really nice.
 
 ## Installation
 
@@ -131,3 +140,7 @@ To modify the extension:
 ## License
 
 MIT
+
+## Useless information
+
+Vibe-coded in a third world country with love, in one afternoon.
