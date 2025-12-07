@@ -147,4 +147,4 @@ MIT
 
 ## Useless information
 
-Vibe-coded in a third world country with love, in one afternoon. Bugs are expected.
+Vibe-coded in a third world country (according to Google, which doesn't let me register as a Chrome developer from Croatia) with love, in one afternoon. Bugs are expected.
