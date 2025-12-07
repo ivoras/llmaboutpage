@@ -55,6 +55,9 @@ A Chrome browser extension that provides a sidebar interface for chatting with L
    ```
 3. The extension will work with the default settings
 
+**The 'Include Page Content' mode uses a large amount of prompt context!** Using Ollama models with at least 16k context is usually required for modern pages, and 32k is probably the sweet spot.
+See [this tutorial](https://localllm.in/blog/local-llm-increase-context-length-ollama) on how to do that.
+
 ### Using with OpenAI API
 
 1. Set Base URL to: `https://api.openai.com`
