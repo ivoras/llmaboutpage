@@ -14,6 +14,10 @@ Version 0.1-beta
 - **Streaming Responses**: Real-time display of LLM responses
 - **No Remote Dependencies**: All libraries bundled locally
 
+**Notes:**
+
+- You should manually clear the chat history when asking something about a new page.
+
 ## Installation
 
 1. **Install Dependencies**:
