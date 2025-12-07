@@ -29,7 +29,7 @@ This Chrome extension exists because I couldn't get Page Assist to include the e
 
 ### Obligatory screenshot
 
-<img width="100" alt="screenshot" src="https://github.com/user-attachments/assets/1ff5088d-ab7f-4e2b-8aeb-1d4792ddeddb" />
+<img width="800" alt="screenshot" src="https://github.com/user-attachments/assets/1ff5088d-ab7f-4e2b-8aeb-1d4792ddeddb" />
 
 ## Installation
 
