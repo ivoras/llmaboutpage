@@ -55,7 +55,8 @@ Version 0.1-beta
    ```bash
    ollama pull granite4:3b
    ```
-3. The extension will work with the default settings
+3. Add the following environment variable to your OS environment: `OLLAMA_ORIGINS=chrome-extension://*,moz-extension://*,safari-web-extension://*`
+4. Optionally, add also this one, which should improve performance: `OLLAMA_FLASH_ATTENTION=1`, and if you're running on Intel or AMD GPUs, this one: `OLLAMA_VULKAN=1`
 
 **The 'Include Page Content' mode uses a large amount of prompt context!** Using Ollama models with at least 16k context is usually required for modern pages, and 32k is probably the sweet spot.
 See [this tutorial](https://localllm.in/blog/local-llm-increase-context-length-ollama) on how to do that.
