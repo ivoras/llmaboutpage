@@ -25,7 +25,7 @@ This Chrome extension exists because I couldn't get Page Assist to include the e
 
 - You should manually clear the chat history when asking something about a new page.
 - Models need to support however long the page is. A 16k context is realistically the minimum.
-- I've tested this mostly with the `qwen3-coder:30b` model, with context size increased to 32k. It works really nice.
+- I've tested this mostly with the `qwen3-coder:30b` model with Ollama, with context size increased to 32k. It works really nice.
 
 ## Installation
 
