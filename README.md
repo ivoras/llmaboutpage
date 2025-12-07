@@ -1,4 +1,4 @@
-# "Ask LLM" Chrome Extension
+# "Ask LLM about a page" Chrome Extension
 
 A Chrome browser extension that provides a sidebar interface for chatting with LLMs via OpenAI-compatible APIs, with support for including current page content.
 
