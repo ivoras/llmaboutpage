@@ -2,6 +2,8 @@
 
 A Chrome browser extension that provides a sidebar interface for chatting with LLMs via OpenAI-compatible APIs, with support for including current page content.
 
+Version 0.1-beta
+
 ## Features
 
 - **Side Panel Interface**: Modern Material Design sidebar for LLM interaction

@@ -1,7 +1,7 @@
 // Initialize Turndown for HTML to Markdown conversion
 let turndownService;
 if (typeof TurndownService !== 'undefined') {
-  turndownService = new TurndownService();
+  turndownService = new TurndownService({headingStyle: 'atx', codeBlockStyle: 'fenced'});
 } else {
   console.error('Turndown library not loaded');
 }
