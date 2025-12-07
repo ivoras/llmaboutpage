@@ -9,6 +9,8 @@ if (typeof TurndownService !== 'undefined') {
 // State management
 let chatHistory = [];
 let currentStreamingMessage = null;
+let currentMessageListener = null;
+let isStreaming = false;
 let settings = {
   baseUrl: 'http://localhost:11434',
   modelName: 'granite4:3b',
@@ -25,6 +27,7 @@ const sendButton = document.getElementById('sendButton');
 const retryButton = document.getElementById('retryButton');
 const includePageButton = document.getElementById('includePageButton');
 const sendOnEnterButton = document.getElementById('sendOnEnterButton');
+const stopButton = document.getElementById('stopButton');
 const clearChatButton = document.getElementById('clearChatButton');
 const chatMessages = document.getElementById('chatMessages');
 
@@ -99,7 +102,7 @@ async function sendMessage() {
       const pageContent = await getPageContent();
       if (pageContent) {
         const markdown = convertHtmlToMarkdown(pageContent);
-        fullMessage = `${userMessage}\n\nUse information from the web page in the section titled "Page" to answer the question. To not abridge or stop your answer early, answer with complete information.\n\n# Page\n\n${markdown}`;
+        fullMessage = `${userMessage}\n\nThe content of the web page is provided in the section titled "Page". If the user references a "page", this is the page they are talking about. Use this information to answer the question.\n\n# Page\n\n${markdown}`;
         console.log(fullMessage);
       }
     } catch (error) {
@@ -145,6 +148,11 @@ retryButton.addEventListener('click', async () => {
   // Resend
   await streamLLMResponse(lastUserMessage);
   saveChatHistory();
+});
+
+// Stop streaming
+stopButton.addEventListener('click', () => {
+  stopStreaming();
 });
 
 // Clear chat
@@ -204,6 +212,40 @@ function convertHtmlToMarkdown(html) {
   }
 }
 
+// Stop streaming
+function stopStreaming() {
+  if (!isStreaming) return;
+
+  // Remove message listener
+  if (currentMessageListener) {
+    chrome.runtime.onMessage.removeListener(currentMessageListener);
+    currentMessageListener = null;
+  }
+
+  // Send stop message to background
+  chrome.runtime.sendMessage({ action: 'stopStream' });
+
+  // Update UI
+  if (currentStreamingMessage) {
+    currentStreamingMessage.classList.remove('streaming');
+    // Keep the partial response that was already received
+    // Get text content by extracting from innerHTML (removing <br> tags and converting back to text)
+    const currentText = currentStreamingMessage.textContent || currentStreamingMessage.innerText || '';
+    if (currentText && currentText.trim()) {
+      chatHistory.push({ role: 'assistant', content: currentText });
+      saveChatHistory();
+    } else {
+      // Remove empty message if nothing was received
+      currentStreamingMessage.remove();
+    }
+    currentStreamingMessage = null;
+  }
+
+  // Disable stop button
+  isStreaming = false;
+  stopButton.disabled = true;
+}
+
 // Stream LLM response
 async function streamLLMResponse(userMessage) {
   // Prepare messages for API
@@ -215,11 +257,18 @@ async function streamLLMResponse(userMessage) {
   if (messages.length === 0 || messages[messages.length - 1].content !== userMessage) {
     messages.push({ role: 'user', content: userMessage });
   }
+  if (includePageEnabled) {
+    messages.unshift({ role: 'system', content: 'You are a helpful assistent, answering questions about a web page. You are given a web page and a question. You need to answer the question using the information from the web page. Do not abridge or stop your answer early, answer with complete information. Do not create a summary of the page unless the user asks for one.' });
+  }
 
   // Create assistant message placeholder
   const assistantMessageDiv = addMessage('assistant', '');
   assistantMessageDiv.classList.add('streaming');
   currentStreamingMessage = assistantMessageDiv;
+
+  // Enable stop button
+  isStreaming = true;
+  stopButton.disabled = false;
 
   let fullResponse = '';
 
@@ -239,6 +288,8 @@ async function streamLLMResponse(userMessage) {
 
     // Listen for streaming chunks
     const messageListener = (message, sender, sendResponse) => {
+      if (!isStreaming) return; // Ignore messages if streaming was stopped
+
       if (message.action === 'streamChunk') {
         fullResponse += message.chunk;
         updateStreamingMessage(assistantMessageDiv, fullResponse);
@@ -248,19 +299,32 @@ async function streamLLMResponse(userMessage) {
         chatHistory.push({ role: 'assistant', content: fullResponse });
         saveChatHistory();
         chrome.runtime.onMessage.removeListener(messageListener);
+        currentMessageListener = null;
+        // Disable stop button
+        isStreaming = false;
+        stopButton.disabled = true;
       } else if (message.action === 'streamError') {
         assistantMessageDiv.classList.remove('streaming');
         updateStreamingMessage(assistantMessageDiv, `Error: ${message.error}`);
         chrome.runtime.onMessage.removeListener(messageListener);
+        currentMessageListener = null;
+        // Disable stop button
+        isStreaming = false;
+        stopButton.disabled = true;
       }
     };
 
+    currentMessageListener = messageListener;
     chrome.runtime.onMessage.addListener(messageListener);
 
   } catch (error) {
     console.error('Error streaming LLM response:', error);
     assistantMessageDiv.classList.remove('streaming');
     updateStreamingMessage(assistantMessageDiv, `Error: ${error.message}`);
+        // Disable stop button
+        isStreaming = false;
+        stopButton.disabled = true;
+    currentMessageListener = null;
   }
 }
 

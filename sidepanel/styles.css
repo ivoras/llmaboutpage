@@ -238,7 +238,6 @@ body {
   border: none;
   border-radius: 50%;
   background-color: transparent;
-  font-size: 20px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -247,13 +246,29 @@ body {
   padding: 0;
 }
 
-.icon-button:hover {
+.icon-svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+  pointer-events: none;
+}
+
+.icon-button:hover:not(:disabled) {
   background-color: rgba(0, 0, 0, 0.08);
   transform: scale(1.1);
 }
 
-.icon-button:active {
+.icon-button:active:not(:disabled) {
   transform: scale(0.95);
+}
+
+.icon-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.icon-button:disabled .icon-svg {
+  opacity: 0.5;
 }
 
 .icon-button.checkbox-button {
@@ -264,8 +279,11 @@ body {
 .icon-button.checkbox-button.active {
   background-color: var(--mdc-theme-primary);
   border-color: var(--mdc-theme-primary);
-  color: var(--mdc-theme-on-primary);
   box-shadow: 0 2px 4px rgba(98, 0, 238, 0.3);
+}
+
+.icon-button.checkbox-button.active .icon-svg {
+  filter: brightness(0) invert(1); /* Make icon white when active */
 }
 
 .icon-button.checkbox-button.active:hover {

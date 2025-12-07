@@ -1,5 +1,8 @@
 // Background service worker for API communication
 
+// Track active streaming requests
+let activeStreamController = null;
+
 // Listen for streaming requests
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'streamLLM') {
@@ -11,6 +14,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         });
       });
     return true; // Keep channel open
+  } else if (request.action === 'stopStream') {
+    if (activeStreamController) {
+      activeStreamController.abort();
+      activeStreamController = null;
+    }
+    return true;
   }
 });
 
@@ -39,11 +48,16 @@ async function streamLLMRequest(request, tabId) {
     headers['Authorization'] = `Bearer ${apiKey}`;
   }
 
+  // Create AbortController for cancellation
+  const abortController = new AbortController();
+  activeStreamController = abortController;
+
   try {
     const response = await fetch(apiUrl, {
       method: 'POST',
       headers: headers,
-      body: JSON.stringify(requestBody)
+      body: JSON.stringify(requestBody),
+      signal: abortController.signal
     });
 
     if (!response.ok) {
@@ -109,11 +123,19 @@ async function streamLLMRequest(request, tabId) {
       }
     }
   } catch (error) {
+    // Don't send error if it was aborted
+    if (error.name === 'AbortError') {
+      activeStreamController = null;
+      return;
+    }
     console.error('Streaming error:', error);
     chrome.runtime.sendMessage({
       action: 'streamError',
       error: error.message
     });
+    activeStreamController = null;
+  } finally {
+    activeStreamController = null;
   }
 }
 
