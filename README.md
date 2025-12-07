@@ -7,7 +7,7 @@ A Chrome browser extension that provides a sidebar interface for chatting with L
 - **Side Panel Interface**: Modern Material Design sidebar for LLM interaction
 - **LLM Configuration**: Configure base URL, model name, and API key
 - **Chat Interface**: Full chat history with streaming responses
-- **Page Content Inclusion**: Convert current page HTML to Markdown and include in prompts
+- **Page Content Inclusion**: Optionally convert current page HTML to Markdown and include in prompts
 - **Settings Persistence**: All settings saved to browser local storage
 - **Streaming Responses**: Real-time display of LLM responses
 - **No Remote Dependencies**: All libraries bundled locally
@@ -37,7 +37,7 @@ A Chrome browser extension that provides a sidebar interface for chatting with L
    - Open Chrome and navigate to `chrome://extensions/`
    - Enable "Developer mode" (toggle in top right)
    - Click "Load unpacked"
-   - Select the extension directory (`c:\Develop\llmaboutpage`)
+   - Select the extension directory
 
 ## Configuration
 
