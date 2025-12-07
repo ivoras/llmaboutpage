@@ -143,4 +143,4 @@ MIT
 
 ## Useless information
 
-Vibe-coded in a third world country with love, in one afternoon.
+Vibe-coded in a third world country with love, in one afternoon. Bugs are expected.
