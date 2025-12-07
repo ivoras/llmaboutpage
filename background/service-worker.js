@@ -27,9 +27,14 @@ async function streamLLMRequest(request, tabId) {
   const { url, model, apiKey, messages } = request;
 
   // Construct API URL - support both OpenAI and Ollama formats
-  const apiUrl = url.endsWith('/v1/chat/completions')
-    ? `${url}`
-    : `${url.replace(/\/$/, '')}/v1/chat/completions`;
+  var apiUrl = url;
+  if (apiUrl.endsWith('/v1/chat/completions')) {
+    // pass
+  } else if (apiUrl.endsWith('/v1')) {
+    apiUrl = apiUrl + '/chat/completions';
+  } else {
+    apiUrl = `${url.replace(/\/$/, '')}/v1/chat/completions`
+  }
 
   // Prepare request body
   const requestBody = {
@@ -62,6 +67,7 @@ async function streamLLMRequest(request, tabId) {
 
     if (!response.ok) {
       const errorText = await response.text();
+      alert(`API Error: ${response.status} ${response.statusText} - ${errorText}`)
       throw new Error(`API Error: ${response.status} ${response.statusText} - ${errorText}`);
     }
 

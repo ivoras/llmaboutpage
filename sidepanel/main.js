@@ -53,7 +53,7 @@ saveConfigButton.addEventListener('click', () => {
   settings.apiKey = apiKeyInput.value.trim();
 
   chrome.storage.local.set({ llmSettings: settings }, () => {
-    showNotification('Configuration saved!');
+    alert('Configuration parameters have been applied.');
   });
 });
 
@@ -157,11 +157,9 @@ stopButton.addEventListener('click', () => {
 
 // Clear chat
 clearChatButton.addEventListener('click', () => {
-  if (confirm('Clear all chat messages?')) {
-    chatHistory = [];
-    chatMessages.innerHTML = '';
-    chrome.storage.local.remove('chatHistory');
-  }
+  chatHistory = [];
+  chatMessages.innerHTML = '';
+  chrome.storage.local.remove('chatHistory');
 });
 
 // Get page content from active tab
@@ -193,7 +191,6 @@ async function getPageContent() {
     }
   });
 
-  console.log(results[0].result); // The DOM HTML
   return results[0].result;
 }
 
@@ -204,8 +201,19 @@ function convertHtmlToMarkdown(html) {
     return html;
   }
 
+  // Remove script tags, style tags, and inline images (data URLs)
+  html = html.replace(/<!--[\s\S]*?-->/gi, '');
+  html = html.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '');
+  html = html.replace(/<style[\s\S]*?>[\s\S]*?<\/style>/gi, '');
+  html = html.replace(/<img[\s\S]*?>/gi, '');
+  console.log(html);
+
   try {
-    return turndownService.turndown(html);
+    var md = turndownService.turndown(html);
+    md = md.replace(/\[]\(.+\)/gi, '');
+    md = md.replace(/\[.+]\(#?\)/gi, '');
+    console.log(md);
+    return md;
   } catch (error) {
     console.error('Error converting HTML to Markdown:', error);
     return html;

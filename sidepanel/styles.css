@@ -52,7 +52,7 @@ body {
 .config-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 /* Material Text Field */
@@ -63,19 +63,19 @@ body {
 }
 
 .mdc-text-field-label {
-  font-size: 12px;
+  font-size: 11px;
   color: rgba(0, 0, 0, 0.6);
-  margin-bottom: 4px;
+  margin-bottom: 2px;
   transition: color 0.15s;
 }
 
 .mdc-text-field-input {
-  height: 56px;
-  padding: 16px 12px 8px 12px;
+  height: 36px;
+  padding: 8px 12px;
   border: 1px solid rgba(0, 0, 0, 0.38);
   border-radius: 4px 4px 0 0;
   background-color: transparent;
-  font-size: 16px;
+  font-size: 14px;
   font-family: inherit;
   transition: border-color 0.15s, background-color 0.15s;
 }
