@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Icon Generator</title>
+</head>
+<body>
+  <h1>Extension Icon Generator</h1>
+  <p>Open this file in a browser and the icons will be generated automatically.</p>
+  <canvas id="canvas16" width="16" height="16" style="border: 1px solid #000;"></canvas>
+  <canvas id="canvas48" width="48" height="48" style="border: 1px solid #000;"></canvas>
+  <canvas id="canvas128" width="128" height="128" style="border: 1px solid #000;"></canvas>
+
+  <script>
+    function generateIcon(canvasId, size, filename) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+
+      // Draw background
+      ctx.fillStyle = '#6200ee';
+      ctx.fillRect(0, 0, size, size);
+
+      // Draw "LLM" text
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `bold ${size * 0.4}px Arial`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('LLM', size / 2, size / 2);
+
+      // Create download link
+      canvas.toBlob((blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+    }
+
+    // Generate icons on load
+    window.onload = () => {
+      setTimeout(() => {
+        generateIcon('canvas16', 16, 'icon-16.png');
+        setTimeout(() => {
+          generateIcon('canvas48', 48, 'icon-48.png');
+          setTimeout(() => {
+            generateIcon('canvas128', 128, 'icon-128.png');
+          }, 500);
+        }, 500);
+      }, 500);
+    };
+  </script>
+</body>
+</html>

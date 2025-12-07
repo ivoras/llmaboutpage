@@ -1,0 +1,14 @@
+{
+  "name": "ask-llm-extension",
+  "version": "1.0.0",
+  "description": "Chrome extension for chatting with LLMs",
+  "scripts": {
+    "build": "node build.js",
+    "copy-deps": "node build.js"
+  },
+  "dependencies": {
+    "turndown": "^7.1.3",
+    "@material/web": "^1.4.0"
+  },
+  "devDependencies": {}
+}

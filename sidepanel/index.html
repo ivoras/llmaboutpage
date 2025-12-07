@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ask LLM</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Top Section: LLM Configuration -->
+    <div class="config-section">
+      <h2 class="section-title">LLM Configuration</h2>
+      <div class="config-form">
+        <div class="mdc-text-field">
+          <label class="mdc-text-field-label" for="baseUrl">Base URL</label>
+          <input type="text" id="baseUrl" class="mdc-text-field-input" value="http://localhost:11434" />
+        </div>
+        <div class="mdc-text-field">
+          <label class="mdc-text-field-label" for="modelName">Model Name</label>
+          <input type="text" id="modelName" class="mdc-text-field-input" value="granite4:3b" />
+        </div>
+        <div class="mdc-text-field">
+          <label class="mdc-text-field-label" for="apiKey">API Key</label>
+          <input type="password" id="apiKey" class="mdc-text-field-input" placeholder="Optional for Ollama" />
+        </div>
+        <button id="saveConfig" class="mdc-button mdc-button--raised">
+          <span class="mdc-button__label">Save Configuration</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Bottom Section: Chat Interface -->
+    <div class="chat-section">
+      <h2 class="section-title">Chat</h2>
+      <div id="chatMessages" class="chat-messages"></div>
+      <div class="chat-input-container">
+        <textarea id="messageInput" class="message-input" placeholder="Type your message..." rows="3"></textarea>
+        <div class="chat-controls">
+          <button id="sendButton" class="mdc-button mdc-button--raised">
+            <span class="mdc-button__label">Send</span>
+          </button>
+          <div class="control-buttons">
+            <button id="retryButton" class="icon-button" title="Retry">♻️</button>
+            <button id="includePageButton" class="icon-button checkbox-button" title="Include Current Page">🌐</button>
+            <button id="sendOnEnterButton" class="icon-button checkbox-button active" title="Send on Enter">⌨️</button>
+            <button id="clearChatButton" class="icon-button" title="Clear Chat">❌</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/lib/turndown/turndown.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
