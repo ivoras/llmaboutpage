@@ -40,7 +40,8 @@ async function streamLLMRequest(request, tabId) {
   const requestBody = {
     model: model,
     messages: messages,
-    stream: true
+    stream: true,
+    stream_options: {include_usage: true}
   };
 
   // Prepare headers
