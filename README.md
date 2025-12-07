@@ -77,13 +77,13 @@ A Chrome browser extension that provides a sidebar interface for chatting with L
    - View streaming responses in real-time
 
 4. **Include Page Content**:
-   - Click the globe icon (🌐) to enable/disable
+   - Click the document icon (📄) to enable/disable
    - When enabled, the current page's content will be converted to Markdown and included in your prompt
 
 5. **Other Controls**:
-   - **Retry** (♻️): Resend the last user message
-   - **Send on Enter** (⌨️): Toggle Enter key to send messages
-   - **Clear Chat** (❌): Clear all chat messages
+   - **Retry** (⟳): Resend the last user message
+   - **Send on Enter** (↩): Toggle Enter key to send messages
+   - **Clear Chat** (⊘): Clear all chat messages
 
 ## Project Structure
 
