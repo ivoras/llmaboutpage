@@ -55,8 +55,11 @@ saveConfigButton.addEventListener('click', () => {
 });
 
 // Toggle buttons
-let includePageEnabled = false;
+let includePageEnabled = true; // Enabled by default
 let sendOnEnterEnabled = true;
+
+// Set initial state for include page button
+includePageButton.classList.add('active');
 
 includePageButton.addEventListener('click', () => {
   includePageEnabled = !includePageEnabled;
@@ -96,7 +99,7 @@ async function sendMessage() {
       const pageContent = await getPageContent();
       if (pageContent) {
         const markdown = convertHtmlToMarkdown(pageContent);
-        fullMessage = `${userMessage}\n\nUse information from the web page in the section titled "Page" to answer the question. To not abridge your answer, process absolutely all the information from the page.\n\n# Page\n\n${markdown}`;
+        fullMessage = `${userMessage}\n\nUse information from the web page in the section titled "Page" to answer the question. To not abridge or stop your answer early, answer with complete information.\n\n# Page\n\n${markdown}`;
         console.log(fullMessage);
       }
     } catch (error) {
@@ -261,9 +264,23 @@ async function streamLLMResponse(userMessage) {
   }
 }
 
+// Escape HTML and convert newlines to <br> tags
+function formatMessageText(text) {
+  if (!text) return '';
+  // Escape HTML to prevent XSS attacks
+  const escaped = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+  // Convert newlines to <br> tags
+  return escaped.replace(/\n/g, '<br>');
+}
+
 // Update streaming message
 function updateStreamingMessage(element, text) {
-  element.textContent = text;
+  element.innerHTML = formatMessageText(text);
   // Auto-scroll to bottom
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
@@ -272,7 +289,7 @@ function updateStreamingMessage(element, text) {
 function addMessage(role, content) {
   const messageDiv = document.createElement('div');
   messageDiv.className = `message ${role}`;
-  messageDiv.textContent = content;
+  messageDiv.innerHTML = formatMessageText(content);
   chatMessages.appendChild(messageDiv);
   chatMessages.scrollTop = chatMessages.scrollHeight;
   return messageDiv;
