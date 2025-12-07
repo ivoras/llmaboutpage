@@ -27,6 +27,10 @@ This Chrome extension exists because I couldn't get Page Assist to include the e
 - Models need to support however long the page is. A 16k context is realistically the minimum.
 - I've tested this mostly with the `qwen3-coder:30b` model with Ollama, with context size increased to 32k. It works really nice.
 
+### Obligatory screenshot
+
+<img width="100" alt="screenshot" src="https://github.com/user-attachments/assets/1ff5088d-ab7f-4e2b-8aeb-1d4792ddeddb" />
+
 ## Installation
 
 1. **Install Dependencies**:
