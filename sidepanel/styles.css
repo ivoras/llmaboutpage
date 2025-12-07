@@ -181,6 +181,16 @@ body {
   border-bottom-left-radius: 4px;
 }
 
+.message.stats {
+  align-self: flex-start;
+  background-color: rgba(0, 0, 0, 0.02);
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 11px;
+  padding: 6px 12px;
+  border-bottom-left-radius: 4px;
+  font-style: italic;
+}
+
 .message.streaming {
   position: relative;
 }

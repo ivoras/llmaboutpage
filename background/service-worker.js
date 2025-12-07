@@ -76,15 +76,21 @@ async function streamLLMRequest(request, tabId) {
     const decoder = new TextDecoder();
     let buffer = '';
     let fullResponse = '';
+    let tokenStats = {
+      promptTokens: 0,
+      completionTokens: 0,
+      totalTokens: 0
+    };
 
     while (true) {
       const { done, value } = await reader.read();
 
       if (done) {
-        // Send final complete message
+        // Send final complete message with statistics
         chrome.runtime.sendMessage({
           action: 'streamComplete',
-          fullResponse: fullResponse
+          fullResponse: fullResponse,
+          stats: tokenStats
         });
         break;
       }
@@ -103,7 +109,8 @@ async function streamLLMRequest(request, tabId) {
           if (data === '[DONE]') {
             chrome.runtime.sendMessage({
               action: 'streamComplete',
-              fullResponse: fullResponse
+              fullResponse: fullResponse,
+              stats: tokenStats
             });
             return;
           }
@@ -120,6 +127,13 @@ async function streamLLMRequest(request, tabId) {
                 action: 'streamChunk',
                 chunk: chunk
               });
+            }
+
+            // Capture token usage if available
+            if (json.usage) {
+              tokenStats.promptTokens = json.usage.prompt_tokens || json.usage.promptTokens || 0;
+              tokenStats.completionTokens = json.usage.completion_tokens || json.usage.completionTokens || 0;
+              tokenStats.totalTokens = json.usage.total_tokens || json.usage.totalTokens || (tokenStats.promptTokens + tokenStats.completionTokens);
             }
           } catch (e) {
             // Skip invalid JSON lines

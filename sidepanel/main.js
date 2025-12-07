@@ -164,24 +164,6 @@ clearChatButton.addEventListener('click', () => {
 
 // Get page content from active tab
 async function getPageContent() {
-/*
-  return new Promise((resolve, reject) => {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (tabs.length === 0) {
-        reject(new Error('No active tab'));
-        return;
-      }
-
-      chrome.tabs.sendMessage(tabs[0].id, { action: 'getDOM' }, (response) => {
-        if (chrome.runtime.lastError) {
-          reject(chrome.runtime.lastError);
-        } else {
-          resolve(response?.html || null);
-        }
-      });
-    });
-  });¸
-  */
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
   const results = await chrome.scripting.executeScript({
@@ -278,6 +260,8 @@ async function streamLLMResponse(userMessage) {
   isStreaming = true;
   stopButton.disabled = false;
 
+  // Track start time for statistics
+  const startTime = Date.now();
   let fullResponse = '';
 
   try {
@@ -305,6 +289,19 @@ async function streamLLMResponse(userMessage) {
         fullResponse = message.fullResponse || fullResponse;
         assistantMessageDiv.classList.remove('streaming');
         chatHistory.push({ role: 'assistant', content: fullResponse });
+
+        // Calculate execution time
+        const executionTime = ((Date.now() - startTime) / 1000).toFixed(2);
+
+        // Get token statistics from message
+        const stats = message.stats || {};
+        const promptTokens = stats.promptTokens || 0;
+        const completionTokens = stats.completionTokens || 0;
+        const totalTokens = stats.totalTokens || (promptTokens + completionTokens);
+
+        // Add statistics message
+        addStatisticsMessage(executionTime, promptTokens, completionTokens, totalTokens);
+
         saveChatHistory();
         chrome.runtime.onMessage.removeListener(messageListener);
         currentMessageListener = null;
@@ -365,6 +362,16 @@ function addMessage(role, content) {
   chatMessages.appendChild(messageDiv);
   chatMessages.scrollTop = chatMessages.scrollHeight;
   return messageDiv;
+}
+
+// Add statistics message after LLM response
+function addStatisticsMessage(executionTime, promptTokens, completionTokens, totalTokens) {
+  const statsText = `⏱️ ${executionTime}s | ${promptTokens} prompt | ${completionTokens} gen | ${totalTokens} total`;
+  const statsDiv = document.createElement('div');
+  statsDiv.className = 'message stats';
+  statsDiv.innerHTML = formatMessageText(statsText);
+  chatMessages.appendChild(statsDiv);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
 // Render chat history
