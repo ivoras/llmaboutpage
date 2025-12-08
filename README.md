@@ -33,6 +33,8 @@ This Chrome extension exists because I couldn't get Page Assist to include the e
 
 ## Installation
 
+Clone this repo, and skip to "Load Extension in Chrome", or ...
+
 1. **Install Dependencies**:
    ```bash
    npm install
