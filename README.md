@@ -150,3 +150,5 @@ MIT
 ## Useless information
 
 Vibe-coded in a third world country (according to Google, which doesn't let me register as a Chrome developer from Croatia) with love, in one afternoon. Bugs are expected.
+
+Until Google adds Croatia on the list of supported countries, the only way to install this Chrome extension is manually - described above.
