@@ -84,7 +84,7 @@ See [this tutorial](https://localllm.in/blog/local-llm-increase-context-length-o
 
 1. Set Base URL to: `https://api.openai.com`
 2. Enter your OpenAI API key
-3. Set Model Name to: `gpt-3.5-turbo` or `gpt-4`
+3. Set Model Name to: `gpt-3.5-turbo` or `gpt-4`, or whatever model you'd like to use
 
 ## Usage
 
