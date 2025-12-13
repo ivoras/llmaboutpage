@@ -63,7 +63,7 @@ Clone this repo, and skip to "Load Extension in Chrome", or ...
 ## Configuration
 
 ### Default Settings
-- **Base URL**: `http://localhost:11434` (any OpenAI API will work, with or without the /v1 suffix)
+- **Base URL**: `http://localhost:11434` (any OpenAI API will work, with or without the /v1 suffix, this extension doesn't use the Ollama API)
 - **Model**: `granite4:3b`
 - **API Key**: Optional (not required for Ollama)
 
